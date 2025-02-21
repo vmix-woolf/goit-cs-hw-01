@@ -46,5 +46,9 @@ ld -o goal goal.o -e _start -lSystem -syslibroot \`xcrun --show-sdk-path\`
 ### Результат наступний ###
 ![img_1.png](img_1.png)
 
+UPDATE:
+
+![img_2.png](img_2.png)
+
 ## Task02 ##
 ![img.png](img.png)
