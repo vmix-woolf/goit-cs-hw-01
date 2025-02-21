@@ -12,6 +12,12 @@ res:        .skip 2   ; 1 byte for number + 1 byte for NULL-terminator
 
 .section __TEXT,__text
 _start:
+    ; nullify res (to eliminate some garbage)
+    adrp x12, res@PAGE
+    add x12, x12, res@PAGEOFF
+    mov w0, 0
+    strb w0, [x12]        ; res[0] = 0
+
     ;load variables
     adrp x9, a@PAGE
     add x9, x9, a@PAGEOFF
@@ -47,15 +53,21 @@ _start:
     mov x16, 4
     svc #0x80
 
-    ; output `res`
+    ; add \n symbol after the number
+    mov w0, #0x0A          ; '\n'
+    adrp x12, res@PAGE
+    add x12, x12, res@PAGEOFF
+    strb w0, [x12, #1]
+
+    ; output `res` (number + '\n')
     mov x0, 1
     adrp x1, res@PAGE
     add x1, x1, res@PAGEOFF
-    mov x2, 1     ; output only 1 symbol
+    mov x2, #2     ; output only 2 symbols (6 and '\n')
     mov x16, 4
     svc #0x80
 
     ; finish the program
-    mov x0, 0
+    mov x0, 00
     mov x16, 1
     svc #0x80
